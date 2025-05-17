@@ -55,3 +55,48 @@ exports.registerUser = async (req, res, next) => {
     }
 
 };
+
+
+exports.loginUser = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email, password } = req.body;
+
+    if(!email || !password) {
+        return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    try {
+        const user = await userModel.findOne({ email }).select('+password');
+        if (!user) {
+            return res.status(401).json({ message: 'User not registered' });
+        }
+
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        const token = await user.generateAuthToken();
+
+        res.status(200).json({
+            message: 'User logged in successfully',
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email
+            },
+            token
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+
+}
+
+
+

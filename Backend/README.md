@@ -38,7 +38,6 @@ POST /users/register
 ```
 
 **Validation Rules:**
-
 - `firstName`: Required, minimum 3 characters
 - `lastName`: Required, minimum 3 characters
 - `email`: Required, valid email format
@@ -47,7 +46,6 @@ POST /users/register
 **Response:**
 
 - `201 Created`: User successfully registered
-
   ```json
   {
     "message": "User registered successfully",
@@ -62,7 +60,6 @@ POST /users/register
   ```
 
 - `400 Bad Request`: Validation error
-
   ```json
   {
     "errors": [
@@ -76,10 +73,16 @@ POST /users/register
   ```
 
 - `400 Bad Request`: User already exists
-
   ```json
   {
     "message": "User already exists with this email"
+  }
+  ```
+
+- `400 Bad Request`: Registration failed
+  ```json
+  {
+    "message": "User registration failed"
   }
   ```
 
@@ -107,17 +110,15 @@ POST /users/login
 ```
 
 **Validation Rules:**
-
 - `email`: Required, valid email format
 - `password`: Required
 
 **Response:**
 
 - `200 OK`: Login successful
-
   ```json
   {
-    "message": "Login successful",
+    "message": "User logged in successfully",
     "user": {
       "id": "user_id",
       "firstName": "John",
@@ -128,11 +129,37 @@ POST /users/login
   }
   ```
 
-- `401 Unauthorized`: Invalid credentials
-
+- `400 Bad Request`: Missing fields
   ```json
   {
-    "message": "Invalid email or password"
+    "message": "Email and password are required"
+  }
+  ```
+
+- `400 Bad Request`: Validation error
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Invalid email format",
+        "param": "email",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- `401 Unauthorized`: User not found
+  ```json
+  {
+    "message": "User not registered"
+  }
+  ```
+
+- `401 Unauthorized`: Invalid credentials
+  ```json
+  {
+    "message": "Invalid credentials"
   }
   ```
 
@@ -151,13 +178,11 @@ GET /users/profile
 ```
 
 **Headers:**
-
 - `Authorization`: Bearer JWT_TOKEN
 
 **Response:**
 
 - `200 OK`: Profile retrieved
-
   ```json
   {
     "user": {
@@ -170,7 +195,6 @@ GET /users/profile
   ```
 
 - `401 Unauthorized`: Authentication failed
-
   ```json
   {
     "message": "Authentication required"
@@ -178,7 +202,6 @@ GET /users/profile
   ```
 
 - `404 Not Found`: User not found
-
   ```json
   {
     "message": "User not found"
