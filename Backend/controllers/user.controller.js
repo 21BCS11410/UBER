@@ -1,7 +1,7 @@
 const userModel = require('../models/User.model');
 const userServices = require('../services/user.service');
 const { validationResult } = require('express-validator');
-const blackListTokenModel = require('../models/blacklistToken.model');
+const blackListTokenModel = require('../models/BlackListedTokenModel');
 
 
 // Register a new user
@@ -35,8 +35,6 @@ exports.registerUser = async (req, res, next) => {
         if(!user) {
             return res.status(400).json({ message: 'User registration failed' });
         }
-
-        await user.save();
 
         // Generate token
         const token = await user.generateAuthToken();

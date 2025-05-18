@@ -303,11 +303,11 @@ POST /captains/register
 - `firstName`: Required, minimum 3 characters
 - `lastName`: Required, minimum 3 characters
 - `email`: Required, valid email format
-- `password`: Required
+- `password`: Required, minimum 6 characters
 - `vehicle`: Required object with:
-  - `color`: Required, minimum 3 characters
-  - `numberPlate`: Required, minimum 3 characters
-  - `capacity`: Required, minimum 1
+  - `color`: Required
+  - `numberPlate`: Required
+  - `capacity`: Required, must be a number
   - `vehicleType`: Required, one of: 'car', 'auto', 'bike'
 - `location`: Optional object with:
   - `latitude`: Number
@@ -359,6 +359,188 @@ POST /captains/register
   ```json
   {
     "message": "Vehicle information is required"
+  }
+  ```
+
+- `500 Internal Server Error`: Server error
+  ```json
+  {
+    "message": "Server error",
+    "error": "Error message"
+  }
+  ```
+
+#### Captain Login
+
+```
+POST /captains/login
+```
+
+**Request Body:**
+
+```json
+{
+  "email": "john.driver@example.com",
+  "password": "password123"
+}
+```
+
+**Validation Rules:**
+- `email`: Required, valid email format
+- `password`: Required
+
+**Response:**
+
+- `200 OK`: Login successful
+  ```json
+  {
+    "message": "Captain logged in successfully",
+    "captain": {
+      "id": "captain_id",
+      "firstName": "John",
+      "lastName": "Driver",
+      "email": "john.driver@example.com",
+      "vehicle": {
+        "color": "Black",
+        "numberPlate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      }
+    },
+    "token": "JWT_TOKEN"
+  }
+  ```
+
+- `400 Bad Request`: Validation error
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Invalid email format",
+        "param": "email",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- `401 Unauthorized`: Captain not found
+  ```json
+  {
+    "message": "User not registered"
+  }
+  ```
+
+- `401 Unauthorized`: Invalid password
+  ```json
+  {
+    "message": "Invalid password"
+  }
+  ```
+
+- `500 Internal Server Error`: Server error
+  ```json
+  {
+    "message": "Server error",
+    "error": "Error message"
+  }
+  ```
+
+#### Get Captain Profile
+
+```
+GET /captains/profile
+```
+
+**Headers:**
+- `Authorization`: Bearer JWT_TOKEN
+
+**Response:**
+
+- `200 OK`: Profile retrieved
+  ```json
+  {
+    "message": "Captain profile fetched successfully",
+    "captain": {
+      "id": "captain_id",
+      "firstName": "John",
+      "lastName": "Driver",
+      "email": "john.driver@example.com",
+      "vehicle": {
+        "color": "Black",
+        "numberPlate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      }
+    }
+  }
+  ```
+
+- `401 Unauthorized`: Authentication failed
+  ```json
+  {
+    "message": "Token not found"
+  }
+  ```
+
+- `401 Unauthorized`: Token blacklisted
+  ```json
+  {
+    "message": "Token is blacklisted"
+  }
+  ```
+
+- `401 Unauthorized`: Invalid token
+  ```json
+  {
+    "message": "Token is unauthorized"
+  }
+  ```
+
+- `404 Not Found`: Captain not found
+  ```json
+  {
+    "message": "Captain not found"
+  }
+  ```
+
+- `500 Internal Server Error`: Server error
+  ```json
+  {
+    "message": "Server error",
+    "error": "Error message"
+  }
+  ```
+
+#### Captain Logout
+
+```
+GET /captains/logout
+```
+
+**Headers:**
+- `Authorization`: Bearer JWT_TOKEN
+
+**Response:**
+
+- `200 OK`: Logout successful
+  ```json
+  {
+    "message": "Captain logged out successfully"
+  }
+  ```
+
+- `401 Unauthorized`: Authentication failed
+  ```json
+  {
+    "message": "Token not found"
+  }
+  ```
+
+- `404 Not Found`: Captain not found
+  ```json
+  {
+    "message": "Captain not found"
   }
   ```
 
