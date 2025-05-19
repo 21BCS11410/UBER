@@ -39,9 +39,11 @@ const CaptainLogin = () => {
           <form onSubmit={(e) => {
             submitHandler(e);
           }} className="flex flex-col">
-            <h3 className="text-lg font-bold mb-1">What's your email</h3>
+            <label htmlFor="email" className="text-lg font-bold mb-1">What's your email</label>
             
             <input 
+              id="email"
+              name="email"
               type="email" 
               required 
               value={email}
@@ -50,9 +52,11 @@ const CaptainLogin = () => {
               className="px-4 py-2 rounded-lg mb-3 text-base focus:outline-none focus:ring-2 focus:ring-green-500 bg-[#f5f5f5] transition-all duration-200 border border-gray-200"
             />
             
-            <h3 className="text-lg font-bold mb-1">Password</h3>
+            <label htmlFor="password" className="text-lg font-bold mb-1">Password</label>
             
             <input 
+              id="password"
+              name="password"
               type="password"
               required 
               value={password}

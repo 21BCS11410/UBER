@@ -11,7 +11,7 @@ const Home = () => {
 
             <div className='bg-white py-4 pb-7 px-4'>
                 <h2 className='text-2xl font-bold'>Get started with Uber</h2>
-                <Link to='/login' className='flex items-center justify-center w-full bg-black text-white py-3 rounded mt-5'>Continue</Link>
+                <Link to='/signup' className='flex items-center justify-center w-full bg-black text-white py-3 rounded mt-5'>Continue</Link>
             </div>
         </div>
 
