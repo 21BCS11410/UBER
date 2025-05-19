@@ -205,7 +205,7 @@ const CaptainSignup = () => {
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200">
         <div className="max-w-md mx-auto">
           <Link to="/signup">
-            <button className="w-full bg-green-600 text-white py-3 px-4 rounded-lg text-base font-medium hover:bg-green-700 border-0 transition-all duration-200 shadow-md flex items-center justify-center">
+            <button className="w-full bg-green-600 text-white py-3 px-4 rounded-lg text-base font-medium hover:bg-blue-600 cursor-pointer border-0 transition-all duration-200 shadow-md flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
               </svg>
