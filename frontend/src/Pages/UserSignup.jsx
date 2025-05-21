@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { UserDataContext } from '../context/DataContext';
+import { UserDataContext } from '../context/userDataContext';
 
 
 const UserSignup = () => {
@@ -21,6 +21,14 @@ const UserSignup = () => {
       lastName: lastName,
       email: email,
       password: password
+    };
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters long");
+      return;
     }
 
     try {

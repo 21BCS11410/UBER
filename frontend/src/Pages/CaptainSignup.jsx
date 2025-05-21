@@ -1,7 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import {CaptainDataContext} from '../context/captainDataContext.jsx'
 
 const CaptainSignup = () => {
+
+  const navigate = useNavigate();
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -11,29 +17,86 @@ const CaptainSignup = () => {
   const [vehicleColor, setVehicleColor] = useState('');
   const [numberPlate, setNumberPlate] = useState('');
   const [capacity, setCapacity] = useState(4);
-  const [captainData, setCaptainData] = useState('');
 
-  const submitHandler = (e) => {
+  const {captain, setCaptain} = useContext(CaptainDataContext)
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setCaptainData({
+    
+    // Validate inputs
+    if (firstName.length < 3) {
+      alert("First name must be at least 3 characters long");
+      return;
+    }
+    
+    if (lastName.length < 3) {
+      alert("Last name must be at least 3 characters long");
+      return;
+    }
+    
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters long");
+      return;
+    }
+    
+    if (vehicleColor.length < 3) {
+      alert("Vehicle color must be at least 3 characters long");
+      return;
+    }
+    
+    if (numberPlate.length < 3) {
+      alert("Number plate must be at least 3 characters long");
+      return;
+    }
+    
+    const captainData = {
       firstName: firstName,
       lastName: lastName,
       email: email,
       password: password,
-      vehicleType: vehicleType,
-      vehicleColor: vehicleColor,
-      numberPlate: numberPlate,
-      capacity: capacity
-    });
-    console.log(captainData);
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-    setVehicleColor('');
-    setNumberPlate('');
-    setCapacity(4);
+      vehicle: {
+        color: vehicleColor,
+        vehicleType: vehicleType,
+        numberPlate: numberPlate,
+        capacity: Number(capacity)
+      }
+    };
+
+    try {
+      console.log("Sending data:", JSON.stringify(captainData));
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData);
+      console.log("Response:", response);
+      
+      if (response.status === 201 || response.status === 200) {
+        const data = response.data;
+        setCaptain(data.captain);
+        localStorage.setItem('token', data.token);
+        navigate('/captain-home');
+        
+        // Clear form only on success
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setVehicleColor('');
+        setNumberPlate('');
+        setCapacity(4);
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      if (error.response && error.response.data) {
+        console.error("Server response:", error.response.data);
+        alert(`Registration failed: ${error.response.data.message || "Please try again."}`);
+      } else {
+        alert("Registration failed. Please try again.");
+      }
+    }
   }
 
   return (
