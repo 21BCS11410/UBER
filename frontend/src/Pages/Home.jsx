@@ -1,8 +1,101 @@
-import React from 'react'
+import React, { useRef } from 'react'
+import logo from '../assets/logo.png'
+import map from '../assets/map.jpg'
+import { useState } from 'react'
+import {useGSAP} from '@gsap/react'
+import gsap from 'gsap'
+import arrowDown from '../assets/arrow-down-s-line.png'
+import LocationSearchPanel from '../components/LocationSearchPanel'
 
 const Home = () => {
+
+  const [pickup, setPickup] = useState('')
+  const [destination, setDestination] = useState('')
+  const [panelOpen, setPanelOpen] = useState(false);
+  const panelRef = useRef(null);
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    console.log('clicked')
+  }
+
+  useGSAP(function(){
+    if(panelOpen){
+        gsap.to(panelRef.current, {
+        height: '70%',
+        duration: 1,
+      })
+    }
+    else{
+      gsap.to(panelRef.current, {
+        height: '0%',
+        duration: 1,
+      })
+    }
+  }, [panelOpen])
+
   return (
-    <div>Home</div>
+    <div className='relative h-screen'>
+
+      <img className='w-22 absolute right-3 top-2' src={logo} alt="logo" />
+
+      <div className='h-screen w-screen'>
+        {/* image for temprory use */}
+        <img className='h-full w-full' src={map} alt='' />
+      </div>
+
+      <div className='h-screen absolute w-full top-0 shadow-lg flex flex-col justify-end'>
+
+        <div className='h-[30%] px-6 py-4 bg-white relative'>
+
+              <h4 className='text-2xl font-bold mb-3'>Find a trip</h4>
+              
+              {panelOpen && (
+                <div 
+                  className="absolute top-4 right-4 cursor-pointer"
+                  onClick={() => setPanelOpen(false)}
+                >
+                  <img className="w-6 h-6" src={arrowDown} alt="Close-panel"/>
+                </div>
+              )}
+
+            <form onSubmit={(e) => {
+              submitHandler(e)
+            }} className='flex flex-col mt-4 relative'>
+              <div className="absolute left-5 top-5 h-[calc(100%-37px)] flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-black"></div>
+                <div className="w-0.5 flex-grow bg-black"></div>
+                <div className="w-3 h-3 rounded-full bg-black"></div>
+              </div>
+              
+              <input 
+                onClick={() => setPanelOpen(true)}
+                value={pickup}
+                onChange={(e) => setPickup(e.target.value)}
+                type="text" 
+                placeholder='Add a pickup location' 
+                className='px-4 py-3 pl-12 border border-gray-300 bg-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4'
+              />
+              <input 
+                onClick={() => setPanelOpen(true)}
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                type="text" 
+                placeholder='Enter your destination' 
+                className='px-4 py-3 pl-12 border border-gray-300 rounded-lg bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500'
+              />
+            </form>
+
+        </div>
+
+
+        <div ref={panelRef} className='bg-white h-0'>
+            {<LocationSearchPanel/>}
+        </div>
+
+      </div>
+
+    </div>
   )
 }
 
