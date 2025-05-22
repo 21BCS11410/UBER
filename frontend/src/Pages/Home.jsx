@@ -4,8 +4,10 @@ import map from '../assets/map.jpg'
 import { useState } from 'react'
 import {useGSAP} from '@gsap/react'
 import gsap from 'gsap'
-import arrowDown from '../assets/arrow-down-s-line.png'
+import arrowDown from '../assets/downArrow.png'
 import LocationSearchPanel from '../components/LocationSearchPanel'
+import VehiclePanel from '../components/VehiclePanel'
+import ConfirmedRide from '../components/ConfirmedRide'
 
 const Home = () => {
 
@@ -13,6 +15,10 @@ const Home = () => {
   const [destination, setDestination] = useState('')
   const [panelOpen, setPanelOpen] = useState(false);
   const panelRef = useRef(null);
+  const vehiclePanelRef = useRef(null);
+  const [vehiclePanel, setVehiclePanel] = useState(false);
+  const confirmRidePanelRef = useRef(null);
+  const [confirmRidePanel, setConfirmRidePanel] = useState(false);
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -34,8 +40,44 @@ const Home = () => {
     }
   }, [panelOpen])
 
+  useGSAP(function(){
+    if(vehiclePanel){
+        gsap.to(vehiclePanelRef.current, {
+        translateY: '0%',
+        duration: 1,
+      })
+    }
+    else{
+      gsap.to(vehiclePanelRef.current, {
+        translateY: '100%',
+        duration: 1,
+      })
+    }
+  }, [vehiclePanel])
+
+
+  useGSAP(function(){
+    if(confirmRidePanel){
+        gsap.to(confirmRidePanelRef.current, {
+        translateY: '0%',
+        duration: 1,
+      })
+    }
+    else{
+      gsap.to(confirmRidePanelRef.current, {
+        translateY: '100%',
+        duration: 1,
+      })
+    }
+  }, [confirmRidePanel])
+
+
+
+
   return (
-    <div className='relative h-screen'>
+
+
+    <div className='relative h-screen overflow-hidden'>
 
       <img className='w-22 absolute right-3 top-2' src={logo} alt="logo" />
 
@@ -90,12 +132,27 @@ const Home = () => {
 
 
         <div ref={panelRef} className='bg-white h-0'>
-            {<LocationSearchPanel/>}
+            {<LocationSearchPanel setPanelOpen={setPanelOpen} setVehiclePanel={setVehiclePanel}/>}
         </div>
 
       </div>
 
+      <div ref={vehiclePanelRef} className='fixed z-10 bottom-0 translate-y-full w-full py-0'>
+            <VehiclePanel setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel}/>
+      </div>
+
+      <div ref={confirmRidePanelRef} className='fixed z-10 bottom-0 translate-y-full w-full py-0'>
+            <ConfirmedRide setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel}/>
+      </div>
+
+      <div className='fixed z-10 bottom-0 translate-y-full w-full py-0'>
+            
+      </div>
+
     </div>
+
+    
+
   )
 }
 
