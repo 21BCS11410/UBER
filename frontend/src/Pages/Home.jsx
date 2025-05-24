@@ -175,14 +175,14 @@ const Home = () => {
       </div>
 
       <div ref={confirmRidePanelRef} className='fixed z-10 bottom-0 translate-y-full w-full py-0'>
-            <ConfirmedRide setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} setVehicleFound={setVehicleFound}/>
+        <ConfirmedRide setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} setVehicleFound={setVehicleFound}/>
       </div>
 
       <div ref={vehicleFoundRef} className='fixed z-10 bottom-0 translate-y-full w-full py-0'>
           <LookingForDriver/>
       </div>
 
-      <div ref={waitingForDriverRef} className='fixed z-10 bottom-0 translate-y-full w-full py-0'>
+      <div ref={waitingForDriverRef} className='fixed z-10 translate-y-full bottom-0 w-full py-0'>
           <WaitingForDriver setWaitingForDriver={setWaitingForDriver}/>
       </div>
 
