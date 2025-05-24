@@ -8,6 +8,8 @@ import arrowDown from '../assets/downArrow.png'
 import LocationSearchPanel from '../components/LocationSearchPanel'
 import VehiclePanel from '../components/VehiclePanel'
 import ConfirmedRide from '../components/ConfirmedRide'
+import LookingForDriver from '../components/LookingForDriver'
+import WaitingForDriver from '../components/waitingForDriver'
 
 const Home = () => {
 
@@ -19,6 +21,10 @@ const Home = () => {
   const [vehiclePanel, setVehiclePanel] = useState(false);
   const confirmRidePanelRef = useRef(null);
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
+  const [vehicleFound, setVehicleFound] = useState(false);
+  const vehicleFoundRef = useRef(null);
+  const waitingForDriverRef = useRef(null);
+  const [waitingForDriver, setWaitingForDriver] = useState(false);
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -55,7 +61,6 @@ const Home = () => {
     }
   }, [vehiclePanel])
 
-
   useGSAP(function(){
     if(confirmRidePanel){
         gsap.to(confirmRidePanelRef.current, {
@@ -71,7 +76,35 @@ const Home = () => {
     }
   }, [confirmRidePanel])
 
+  useGSAP(function(){
+    if(vehicleFound){
+        gsap.to(vehicleFoundRef.current, {
+        translateY: '0%',
+        duration: 1,
+      })
+    }
+    else{
+      gsap.to(vehicleFoundRef.current, {
+        translateY: '100%',
+        duration: 1,
+      })
+    }
+  }, [vehicleFound])
 
+  useGSAP(function(){
+    if(waitingForDriver){
+        gsap.to(waitingForDriverRef.current, {
+        translateY: '0%',
+        duration: 1,
+      })
+    }
+    else{
+      gsap.to(waitingForDriverRef.current, {
+        translateY: '100%',
+        duration: 1,
+      })
+    }
+  }, [waitingForDriver])
 
 
   return (
@@ -142,11 +175,15 @@ const Home = () => {
       </div>
 
       <div ref={confirmRidePanelRef} className='fixed z-10 bottom-0 translate-y-full w-full py-0'>
-            <ConfirmedRide setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel}/>
+            <ConfirmedRide setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} setVehicleFound={setVehicleFound}/>
       </div>
 
-      <div className='fixed z-10 bottom-0 translate-y-full w-full py-0'>
-            
+      <div ref={vehicleFoundRef} className='fixed z-10 bottom-0 translate-y-full w-full py-0'>
+          <LookingForDriver/>
+      </div>
+
+      <div ref={waitingForDriverRef} className='fixed z-10 bottom-0 translate-y-full w-full py-0'>
+          <WaitingForDriver setWaitingForDriver={setWaitingForDriver}/>
       </div>
 
     </div>
