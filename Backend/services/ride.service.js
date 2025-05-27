@@ -1,5 +1,7 @@
 const rideModel = require('../models/ride.model');
 const mapsservice = require('./maps.service');
+const crypto = require('crypto');
+
 
 
 // Calculate fare based on vehicle type and distance/time
@@ -45,8 +47,14 @@ async function getFare(pickUp, destination) {
     return fares;
 }  
 
-
-
+ function getOtp(num) {
+    // Generate random bytes using crypto
+    
+    // Generate random number between 0-9 for specified number of digits
+    const otp = crypto.randomInt(Math.pow(10, num-1), Math.pow(10, num)-1);
+    
+    return otp;
+} 
 
 
 module.exports.createRide = async ({
@@ -67,6 +75,7 @@ module.exports.createRide = async ({
         user,
         pickup,
         destination,
+        otp: getOtp(6),
         fare: Math.round(fares[vehicleType]/100),
     });
 
